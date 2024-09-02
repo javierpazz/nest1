@@ -4,14 +4,16 @@ import { OrdersController } from './orders.controller';
 // import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthModule } from './../auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Order } from './entities';
+import { Order, OrderItem } from './entities';
+import { ProductsModule } from 'src/products/products.module';
 
 @Module({
   controllers: [OrdersController],
   providers: [OrdersService],
   imports: [
-    TypeOrmModule.forFeature([ Order ]),
+    TypeOrmModule.forFeature([ Order, OrderItem ]),
     AuthModule,
+    ProductsModule,
   ],
   exports: [
     OrdersService,

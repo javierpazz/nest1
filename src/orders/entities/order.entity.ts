@@ -1,9 +1,10 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { OrderItem } from './';
 
 export enum OrderStatus {
-    PENDING,
-    DELIVERED,
-    CANCELLED
+    PENDING = "PENDING",
+    DELIVERED = "DELIVERED",
+    CANCELLED = "CANCELLED"
 }
 
 @Entity({ name: 'orders' })
@@ -24,6 +25,7 @@ export class Order {
     totalItems: number;
 
     @Column('text', {
+        default: OrderStatus.PENDING
     })    
     status: OrderStatus
 
@@ -31,18 +33,22 @@ export class Order {
         default: true
     })
     isActive: boolean;
-    
-    @Column('date', {
-        nullable: true
-    })
-    paidAt: Date;
+    @Column({
+        nullable: false,
+        default: () => 'CURRENT_TIMESTAMP' 
+      })
+      paidAt: Date;
 
-    // // images
-    // @OneToMany(
-    //     () => OrderItem,
-    //     (orderItem) => orderItem.order,
-    //     { cascade: true, eager: true }
-    // )
-    // images?: OrderItem[];
+    // Relaciones
+
+    @OneToMany(
+    () => OrderItem,
+    (orderItem) => orderItem.order,
+    { cascade: true, eager: true }
+    // { cascade: true, lazy: true }
+    // { cascade: true }
+    )
+    items?: OrderItem[]
+
 
 }

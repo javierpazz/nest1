@@ -1,4 +1,4 @@
 export { Order } from './order.entity';
-export { OrderItem } from './orderItem.entity11';
+export { OrderItem } from './orderItem.entity';
 
 

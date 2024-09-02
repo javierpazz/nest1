@@ -32,6 +32,11 @@ export class ProductsController {
     return this.productsService.findOnePlain( term );
   }
 
+  @Get()
+  validateproduct( @Param() ids: string[] ) {
+    return this.productsService.validateProducts(ids);
+  }
+
   @Patch(':id')
   @Auth( ValidRoles.admin )
   update(
@@ -47,4 +52,5 @@ export class ProductsController {
   remove(@Param('id', ParseUUIDPipe ) id: string) {
     return this.productsService.remove( id );
   }
+
 }

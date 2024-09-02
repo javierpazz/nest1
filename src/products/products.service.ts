@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
-
+import { In } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
@@ -39,7 +39,6 @@ export class ProductsService {
         images: images.map( image => this.productImageRepository.create({ url: image }) ),
         user,
       });
-      
       await this.productRepository.save( product );
 
       return { ...product, images };
@@ -153,7 +152,6 @@ export class ProductsService {
     
   }
 
-
   private handleDBExceptions( error: any ) {
 
     if ( error.code === '23505' )
@@ -179,5 +177,26 @@ export class ProductsService {
     }
 
   }
+
+  ///////////
+async validateProducts(ids: string[]) {
+  ids = Array.from(new Set(ids));
+
+  const products = await this.productRepository.find({
+    where: {
+      id: In(ids)
+    }
+  });
+
+  if ( products.length !== ids.length ) {
+    this.handleDBExceptions("error diferent table JPZ");
+  }
+
+
+  return products;
+
+}
+///////////
+
 
 }
