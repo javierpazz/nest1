@@ -10,7 +10,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { OrderPaginationDto } from './dto/order-pagination.dto';
-import { ChangeOrderStatusDto } from './dto';
+import { ChangeOrderStatusDto, StatusDto } from './dto';
 import { Order, OrderItem } from './entities';
 import { ProductsService } from './../products/products.service';
 
@@ -151,16 +151,19 @@ export class OrdersService {
       })),
     };
   }
-        
-  async changeStatus(changeOrderStatusDto: ChangeOrderStatusDto) {
-    const { id, status } = changeOrderStatusDto;
 
-    const order = await this.findOne(id);
-    if (order.status === status) {
-      return order;
+  async changeStatus( id: string, statusDto: StatusDto) {
+  // async changeStatus(changeOrderStatusDto: ChangeOrderStatusDto) {
+    // const { id, status } = statusDto; 
+    const {status } = statusDto; 
+
+    const neworder = await this.findOne(id);
+    if (neworder.status === status) {
+      return neworder;
     }
+    neworder.status = status;
 
-    return this.orderRepository.save(order);
+    return this.orderRepository.save(neworder);
   }
 
 

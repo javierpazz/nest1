@@ -3,7 +3,7 @@ import { Body, Controller, Get, NotImplementedException, Param, ParseUUIDPipe, P
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderPaginationDto } from './dto/order-pagination.dto';
-import { ChangeOrderStatusDto } from './dto';
+import { StatusDto } from './dto';
 
 @Controller('orders')
 export class OrdersController {
@@ -26,8 +26,9 @@ export class OrdersController {
   @Patch(':id')
   changeOrderStatus(
     @Param('id', ParseUUIDPipe ) id: string,
-    @Body() changeOrderStatusDto: ChangeOrderStatusDto ) {
-    return this.ordersService.changeStatus(changeOrderStatusDto)
+    @Body() statusDto: StatusDto,
+   ) {
+    console.log (statusDto);
+    return this.ordersService.changeStatus(id, statusDto)
   }
-
 }
